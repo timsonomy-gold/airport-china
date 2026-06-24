@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+*.secretref.tmp.json
+openclaw*.tmp.json
+secrets*.tmp.json
+auth-profiles.secretref.tmp.json
