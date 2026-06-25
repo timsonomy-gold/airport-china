@@ -4,3 +4,4 @@ __pycache__/
 openclaw*.tmp.json
 secrets*.tmp.json
 auth-profiles.secretref.tmp.json
+wiki_airport_pages/

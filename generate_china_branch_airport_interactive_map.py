@@ -1,3 +1,4 @@
+import csv
 import json
 from pathlib import Path
 
@@ -7,10 +8,148 @@ import generate_china_airport_level_map as base
 
 ROOT = Path(__file__).resolve().parent
 OUT_HTML = ROOT / "china_branch_airports_interactive_2026-06.html"
+OPENFLIGHTS_ROUTES = ROOT / "openflights_routes.dat"
+SCHEDULED_ROUTES = ROOT / "china_scheduled_routes_wiki_2026-06.json"
+FLIGHTCONNECTIONS_ROUTES = ROOT / "china_current_routes_flightconnections_2026-06.json"
 
 WIDTH = 5200
 HEIGHT = 3600
 MARGIN = (210, 230, 210, 220)
+
+SUPPLEMENTAL_ROUTE_LINKS = {
+    "URC": [
+        "AAT", "ACF", "BPL", "DHH", "FYN", "HJB", "HMI", "HTN", "IQM",
+        "JBK", "KCA", "KHG", "KJI", "KRL", "KRY", "LTJ", "NLT", "RQA",
+        "SHF", "TCG", "TLQ", "TWC", "YIN", "YTW", "ZFL",
+    ],
+    "HRB": [
+        "DQA", "DTU", "FYJ", "HEK", "JGD", "JMU", "JSJ", "JXA", "LDS",
+        "MDG", "NDG", "OHE",
+    ],
+    "KMG": [
+        "BSD", "CWJ", "DIG", "DLU", "JHG", "JMJ", "LJG", "LNJ", "LUM",
+        "NLH", "SYM", "TCZ", "WNH", "ZAT",
+    ],
+    "LHW": ["DNH", "GXH", "IQN", "JGN", "JIC", "LNL", "THQ", "XNN", "YZY", "ZHY"],
+    "XIY": ["AKA", "ENY", "GYU", "HZG", "IQN", "UYN", "YCU", "ZHY"],
+    "HET": [
+        "AXF", "BAV", "CIF", "EJN", "ERL", "HLD", "HLH", "HUO", "NZH",
+        "NZL", "RHT", "RLK", "TGO", "UCB", "WUA", "XIL", "YIE",
+    ],
+    "SHE": ["AOG", "CHG", "DDG", "DLC", "JNZ", "YKH"],
+    "CGQ": ["DBC", "NBS", "TNH", "YNJ", "YSQ"],
+    "LXA": ["APJ", "BPX", "DDR", "LGZ", "LZY", "NGQ", "RKZ"],
+    "KWE": ["ACX", "AVA", "BFJ", "HZH", "KJH", "LLB", "LPF", "TEN"],
+    "CKG": ["JIQ", "LIA", "WXN", "WSK", "YBP"],
+}
+
+
+def build_route_payload(airport_codes):
+    route_map = {}
+
+    def ensure_route(
+        source,
+        target,
+        source_name,
+        airline=None,
+        equipment=None,
+        flight_no=None,
+        conditions=None,
+        evidence="legacy",
+    ):
+        if source not in airport_codes or target not in airport_codes or source == target:
+            return
+        item = route_map.setdefault(
+            (source, target),
+            {
+                "from": source,
+                "to": target,
+                "sources": set(),
+                "airlines": set(),
+                "equipment": set(),
+                "flightNos": set(),
+                "conditions": set(),
+                "evidence": set(),
+            },
+        )
+        item["sources"].add(source_name)
+        item["evidence"].add(evidence)
+        if airline and airline != r"\N":
+            item["airlines"].add(airline)
+        if equipment and equipment != r"\N":
+            item["equipment"].update(part for part in equipment.split() if part)
+        if flight_no:
+            item["flightNos"].add(flight_no)
+        for condition in conditions or []:
+            if condition:
+                item["conditions"].add(condition)
+
+    if SCHEDULED_ROUTES.exists():
+        scheduled_routes = json.loads(SCHEDULED_ROUTES.read_text(encoding="utf-8"))
+        for route in scheduled_routes:
+            evidence = "conditioned" if route.get("conditions") or route.get("flightNos") else "published"
+            source_name = "维基班期/航点表"
+            ensure_route(
+                route.get("from"),
+                route.get("to"),
+                source_name,
+                flight_no="、".join(route.get("flightNos") or []),
+                conditions=route.get("conditions") or [],
+                evidence=evidence,
+            )
+
+    if FLIGHTCONNECTIONS_ROUTES.exists():
+        payload = json.loads(FLIGHTCONNECTIONS_ROUTES.read_text(encoding="utf-8"))
+        for route in payload.get("routes", []):
+            ensure_route(
+                route.get("from"),
+                route.get("to"),
+                "FlightConnections 当前直飞",
+                conditions=route.get("conditions") or [],
+                evidence="current",
+            )
+
+    if OPENFLIGHTS_ROUTES.exists():
+        with OPENFLIGHTS_ROUTES.open(encoding="utf-8", newline="") as handle:
+            for row in csv.reader(handle):
+                if len(row) < 9:
+                    continue
+                ensure_route(row[2], row[4], "OpenFlights 历史公开表", row[0], row[8], evidence="legacy")
+
+    # The public OpenFlights table is old and misses many newer Chinese branch airports.
+    # Keep a small hand-curated supplement for recently opened or under-covered regional links.
+    for source, targets in SUPPLEMENTAL_ROUTE_LINKS.items():
+        for target in targets:
+            ensure_route(source, target, "人工补充", None, None, evidence="legacy")
+            ensure_route(target, source, "人工补充", None, None, evidence="legacy")
+
+    routes = []
+    for item in route_map.values():
+        evidence = item["evidence"]
+        source_level = (
+            "current"
+            if "current" in evidence
+            else "conditioned"
+            if "conditioned" in evidence
+            else "published"
+            if "published" in evidence
+            else "legacy"
+        )
+        routes.append(
+            {
+                "from": item["from"],
+                "to": item["to"],
+                "sources": sorted(item["sources"]),
+                "airlines": sorted(item["airlines"])[:8],
+                "airlineCount": len(item["airlines"]),
+                "equipment": sorted(item["equipment"])[:6],
+                "flightNos": sorted(item["flightNos"])[:8],
+                "conditions": sorted(item["conditions"])[:8],
+                "sourceLevel": source_level,
+                "conditionKnown": bool(item["conditions"]),
+            }
+        )
+    return sorted(routes, key=lambda route: (route["from"], route["to"]))
 
 
 def projected_bounds(airports):
@@ -92,6 +231,8 @@ def main():
                 "branch": airport["is_branch"],
             }
         )
+
+    route_payload = build_route_payload({airport["iata"] for airport in airport_payload})
 
     region_payload = [
         {
@@ -180,6 +321,71 @@ def main():
     .major-hit {{
       fill: #9faab4;
       opacity: 0.62;
+    }}
+    .route-line {{
+      fill: none;
+      stroke-width: 2.1;
+      stroke-linecap: round;
+      opacity: 0.46;
+      pointer-events: none;
+      vector-effect: non-scaling-stroke;
+      mix-blend-mode: multiply;
+    }}
+    .route-line.outgoing {{ stroke: #176fb3; }}
+    .route-line.incoming {{ stroke: #d47a1f; }}
+    .route-line.published {{ opacity: 0.38; }}
+    .route-line.legacy {{
+      opacity: 0.24;
+      stroke-dasharray: 8 8;
+    }}
+    .route-endpoint {{
+      pointer-events: none;
+      stroke: #fff;
+      stroke-width: 3;
+      filter: drop-shadow(0 1px 2px rgba(20, 34, 48, 0.24));
+    }}
+    .route-endpoint.outgoing {{ fill: #176fb3; }}
+    .route-endpoint.incoming {{ fill: #d47a1f; }}
+    .route-endpoint.both {{ fill: #7b5bb2; }}
+    .route-label {{
+      pointer-events: none;
+      font-size: 48px;
+      font-weight: 800;
+      fill: #17425d;
+      paint-order: stroke;
+      stroke: rgba(255,255,255,0.96);
+      stroke-width: 12px;
+      stroke-linejoin: round;
+    }}
+    .route-key {{
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin: 2px 10px 2px 0;
+      white-space: nowrap;
+    }}
+    .route-swatch {{
+      width: 18px;
+      height: 3px;
+      border-radius: 999px;
+      display: inline-block;
+    }}
+    .route-note {{
+      color: #657487;
+      font-size: 12px;
+      line-height: 1.55;
+      margin-top: 4px;
+    }}
+    .airport-hit.dimmed {{
+      opacity: 0.16;
+    }}
+    .airport-hit.connected-hit {{
+      stroke: #145f92;
+      stroke-width: 7;
+    }}
+    .airport-hit.selected-hit {{
+      stroke: #122f44;
+      stroke-width: 9;
     }}
     .label {{
       pointer-events: none;
@@ -447,6 +653,7 @@ def main():
     <section class="map-wrap">
       <svg id="map" viewBox="0 0 {WIDTH} {HEIGHT}" aria-label="中国大陆支线机场可缩放地图">
         <g id="mapLayer">{paths}</g>
+        <g id="routeLayer"></g>
         <g id="airportLayer"></g>
         <g id="labelLayer"></g>
       </svg>
@@ -509,6 +716,7 @@ def main():
   <script>
     const AIRPORTS = {json.dumps(airport_payload, ensure_ascii=False)};
     const REGIONS = {json.dumps(region_payload, ensure_ascii=False)};
+    const ROUTES = {json.dumps(route_payload, ensure_ascii=False)};
     const SVG_W = {WIDTH};
     const SVG_H = {HEIGHT};
     const BASE_PAD = 150;
@@ -532,6 +740,7 @@ def main():
     const app = document.getElementById("app");
     const svg = document.getElementById("map");
     const mapLayer = document.getElementById("mapLayer");
+    const routeLayer = document.getElementById("routeLayer");
     const airportLayer = document.getElementById("airportLayer");
     const labelLayer = document.getElementById("labelLayer");
     const slider = document.getElementById("zoomSlider");
@@ -545,6 +754,13 @@ def main():
     const detail = document.getElementById("detail");
     const regionBox = document.getElementById("regions");
     const chips = [...document.querySelectorAll(".chip")];
+    const airportsByIata = new Map(AIRPORTS.map(airport => [airport.iata, airport]));
+    const outgoingRoutesByIata = new Map(AIRPORTS.map(airport => [airport.iata, []]));
+    const incomingRoutesByIata = new Map(AIRPORTS.map(airport => [airport.iata, []]));
+    for (const route of ROUTES) {{
+      outgoingRoutesByIata.get(route.from)?.push(route);
+      incomingRoutesByIata.get(route.to)?.push(route);
+    }}
 
     let transform = {{ k: 1, x: 0, y: 0 }};
     let fitTransform = {{ k: 1, x: 0, y: 0 }};
@@ -653,6 +869,20 @@ def main():
       return AIRPORTS.filter(a => airportVisibleByClass(a) && airportVisibleBySearch(a));
     }}
 
+    function routeGroups(a) {{
+      return {{
+        outgoing: outgoingRoutesByIata.get(a.iata) || [],
+        incoming: incomingRoutesByIata.get(a.iata) || []
+      }};
+    }}
+
+    function routeAirportCodes(groups) {{
+      const codes = new Set();
+      for (const route of groups.outgoing) codes.add(route.to);
+      for (const route of groups.incoming) codes.add(route.from);
+      return codes;
+    }}
+
     function labelAllowed(a) {{
       if (selected && selected.iata === a.iata) return true;
       if (!a.branch) return transform.k >= 3.8;
@@ -662,19 +892,27 @@ def main():
     }}
 
     function drawAirports() {{
+      routeLayer.replaceChildren();
       airportLayer.replaceChildren();
       labelLayer.replaceChildren();
       const visible = visibleAirports();
+      const groups = selected ? routeGroups(selected) : {{ outgoing: [], incoming: [] }};
+      const routeCodes = routeAirportCodes(groups);
+      drawRoutes(groups);
       const searchActive = search.value.trim().length > 0;
       const sorted = [...visible].sort((a, b) => Number(a.branch) - Number(b.branch));
 
       for (const a of sorted) {{
         const p = airportScreen(a);
         const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        const classes = [a.branch ? "airport-hit" : "airport-hit major-hit"];
+        if (selected && selected.iata === a.iata) classes.push("selected-hit");
+        if (routeCodes.has(a.iata)) classes.push("connected-hit");
+        if (selected && routeCodes.size && selected.iata !== a.iata && !routeCodes.has(a.iata)) classes.push("dimmed");
         circle.setAttribute("cx", p.x);
         circle.setAttribute("cy", p.y);
         circle.setAttribute("r", classRadius[a.cls] || 5);
-        circle.setAttribute("class", a.branch ? "airport-hit" : "airport-hit major-hit");
+        circle.setAttribute("class", classes.join(" "));
         circle.setAttribute("fill", a.branch ? classColor[a.cls] : "#9faab4");
         circle.style.opacity = "1";
         airportLayer.appendChild(circle);
@@ -699,6 +937,75 @@ def main():
       }}
 
       renderList(visible);
+    }}
+
+    function routeCurvePath(start, end, direction) {{
+      const dx = end.x - start.x;
+      const dy = end.y - start.y;
+      const distance = Math.hypot(dx, dy) || 1;
+      const mx = (start.x + end.x) / 2;
+      const my = (start.y + end.y) / 2;
+      const bend = Math.min(280, Math.max(55, distance * 0.12)) * direction;
+      const cx = mx - (dy / distance) * bend;
+      const cy = my + (dx / distance) * bend;
+      return `M ${{start.x.toFixed(1)}} ${{start.y.toFixed(1)}} Q ${{cx.toFixed(1)}} ${{cy.toFixed(1)}} ${{end.x.toFixed(1)}} ${{end.y.toFixed(1)}}`;
+    }}
+
+    function appendRoutePath(path, className) {{
+      const item = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      item.setAttribute("class", className);
+      item.setAttribute("d", path);
+      routeLayer.appendChild(item);
+    }}
+
+    function routeLabelTarget(route, direction) {{
+      return direction === "outgoing" ? airportsByIata.get(route.to) : airportsByIata.get(route.from);
+    }}
+
+    function drawRoutes(groups) {{
+      const total = groups.outgoing.length + groups.incoming.length;
+      if (!selected || !total) return;
+      const start = airportScreen(selected);
+      const showRouteLabels = total <= 30 || transform.k >= 2.4;
+      const endpoints = new Map();
+      const labeledEndpoints = new Set();
+      const routeJobs = [
+        ...groups.outgoing.map(route => ({{ route, direction: "outgoing", sign: 1 }})),
+        ...groups.incoming.map(route => ({{ route, direction: "incoming", sign: -1 }}))
+      ];
+
+      for (const job of routeJobs) {{
+        const target = routeLabelTarget(job.route, job.direction);
+        if (!target) continue;
+        const end = airportScreen(target);
+        const path = routeCurvePath(start, end, job.sign);
+        appendRoutePath(path, `route-line ${{job.direction}} ${{job.route.sourceLevel || "legacy"}}`);
+        const endpoint = endpoints.get(target.iata) || {{ airport: target, outgoing: false, incoming: false }};
+        endpoint[job.direction] = true;
+        endpoints.set(target.iata, endpoint);
+
+        if (!showRouteLabels || labeledEndpoints.has(target.iata)) continue;
+        labeledEndpoints.add(target.iata);
+        const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        label.setAttribute("class", "route-label");
+        label.setAttribute("x", end.x + 24);
+        label.setAttribute("y", end.y - 24);
+        label.textContent = `${{target.iata}} ${{target.shortName}}`;
+        routeLayer.appendChild(label);
+      }}
+
+      for (const endpoint of endpoints.values()) {{
+        const p = airportScreen(endpoint.airport);
+        const point = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        const directionClass = endpoint.outgoing && endpoint.incoming
+          ? "both"
+          : endpoint.outgoing ? "outgoing" : "incoming";
+        point.setAttribute("class", `route-endpoint ${{directionClass}}`);
+        point.setAttribute("cx", p.x);
+        point.setAttribute("cy", p.y);
+        point.setAttribute("r", Math.max(12, (classRadius[endpoint.airport.cls] || 18) * 0.62));
+        routeLayer.appendChild(point);
+      }}
     }}
 
     function selectedFilterName(filter) {{
@@ -737,10 +1044,39 @@ def main():
 
     function selectAirport(a, fly) {{
       selected = a;
+      const groups = routeGroups(a);
+      const routeEvidenceText = route => {{
+        if (route.conditions && route.conditions.length) return route.conditions.join("；");
+        if (route.flightNos && route.flightNos.length) return `${{route.flightNos.join("、")}}；班期未标注`;
+        if (route.sourceLevel === "published") return "已列入公开航点表，班期未标注";
+        return "历史/补充线路，班期未标注";
+      }};
+      const routeItemText = (route, airport) => {{
+        const flightText = route.flightNos && route.flightNos.length ? `｜${{route.flightNos.join("、")}}` : "";
+        return `${{airport.iata}} ${{airport.shortName}}（${{routeEvidenceText(route)}}${{flightText}}）`;
+      }};
+      const outgoing = groups.outgoing
+        .map(route => ({{ route, airport: airportsByIata.get(route.to) }}))
+        .filter(item => item.airport)
+        .sort((left, right) => left.airport.iata.localeCompare(right.airport.iata));
+      const incoming = groups.incoming
+        .map(route => ({{ route, airport: airportsByIata.get(route.from) }}))
+        .filter(item => item.airport)
+        .sort((left, right) => left.airport.iata.localeCompare(right.airport.iata));
+      const outgoingText = outgoing.map(item => routeItemText(item.route, item.airport)).join("、") || "暂无已录入出发航线";
+      const incomingText = incoming.map(item => routeItemText(item.route, item.airport)).join("、") || "暂无已录入进入航线";
+      const knownCount = [...groups.outgoing, ...groups.incoming].filter(route => route.conditionKnown).length;
+      const routeSummary = `
+        <span class="route-key"><i class="route-swatch" style="background:#176fb3"></i>出发 ${{outgoing.length}} 条</span>
+        <span class="route-key"><i class="route-swatch" style="background:#d47a1f"></i>进入 ${{incoming.length}} 条</span><br>
+        <div class="route-note">优先显示 FlightConnections 当前直飞；季节性月份来自其当前航线图。虚线为历史公开表或人工补充兜底。已识别条件 ${{knownCount}} 条。</div>
+        出发航线：${{outgoingText}}<br>
+        进入航线：${{incomingText}}`;
       detail.innerHTML = `<strong>${{a.iata}} ${{a.name}}</strong><br>
         ICAO：${{a.icao}}　等级：${{a.cls}}　性质：${{a.type}}<br>
         服务城市：${{a.city}}<br>
-        坐标：${{a.lat.toFixed(5)}}, ${{a.lon.toFixed(5)}}　启用：${{a.opened}}`;
+        坐标：${{a.lat.toFixed(5)}}, ${{a.lon.toFixed(5)}}　启用：${{a.opened}}<br>
+        ${{routeSummary}}`;
       if (fly) {{
         const targetK = Math.max(transform.k, fitTransform.k * 2.2);
         setTransform({{

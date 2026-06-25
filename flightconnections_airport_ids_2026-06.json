@@ -1,0 +1,1022 @@
+{
+  "AAT": {
+    "a": "Altay (AAT)",
+    "c": 540
+  },
+  "ACF": {
+    "a": "Alaer (ACF)",
+    "c": 8908
+  },
+  "ACX": {
+    "a": "Xingyi, Guizhou (ACX)",
+    "c": 7684
+  },
+  "AEB": {
+    "a": "Baise (AEB)",
+    "c": 613
+  },
+  "AHJ": {
+    "a": "Hongyuan (AHJ)",
+    "c": 8282
+  },
+  "AKA": {
+    "a": "Ankang (AKA)",
+    "c": 701
+  },
+  "AOG": {
+    "a": "Anshan (AOG)",
+    "c": 795
+  },
+  "APJ": {
+    "a": "Ngari Burang (APJ)",
+    "c": 8972
+  },
+  "AQG": {
+    "a": "Anqing (AQG)",
+    "c": 830
+  },
+  "AVA": {
+    "a": "Anshun (AVA)",
+    "c": 7688
+  },
+  "AXF": {
+    "a": "Alxa Left Banner, Bayanhot (AXF)",
+    "c": 8242
+  },
+  "BAR": {
+    "a": "Qionghai (BAR)",
+    "c": 8438
+  },
+  "BAV": {
+    "a": "Baotou (BAV)",
+    "c": 1022
+  },
+  "BFY": {
+    "a": "Bengbu Tenghu (BFY)",
+    "c": 9052
+  },
+  "BPE": {
+    "a": "Qinhuangdao (BPE)",
+    "c": 8296
+  },
+  "BPL": {
+    "a": "Bole (BPL)",
+    "c": 1352
+  },
+  "BPX": {
+    "a": "Qamdo (Changdu) (BPX)",
+    "c": 1358
+  },
+  "BSD": {
+    "a": "Baoshan, Yunnan (BSD)",
+    "c": 1395
+  },
+  "BZJ": {
+    "a": "Bozhou (BZJ)",
+    "c": 9022
+  },
+  "BZX": {
+    "a": "Enyang (BZX)",
+    "c": 8576
+  },
+  "CDE": {
+    "a": "Chengde (CDE)",
+    "c": 8465
+  },
+  "CHG": {
+    "a": "Chaoyang, Liaoning (CHG)",
+    "c": 1709
+  },
+  "CIF": {
+    "a": "Chifeng (CIF)",
+    "c": 1731
+  },
+  "CIH": {
+    "a": "Changzhi (CIH)",
+    "c": 1733
+  },
+  "CWJ": {
+    "a": "Cangyuan (CWJ)",
+    "c": 8423
+  },
+  "DAT": {
+    "a": "Datong (DAT)",
+    "c": 2090
+  },
+  "DBC": {
+    "a": "Baicheng (DBC)",
+    "c": 8446
+  },
+  "DCY": {
+    "a": "Daocheng (DCY)",
+    "c": 8095
+  },
+  "DDG": {
+    "a": "Dandong (DDG)",
+    "c": 2115
+  },
+  "DDR": {
+    "a": "Shigatse (DDR)",
+    "c": 8857
+  },
+  "DEJ": {
+    "a": "Tongren Dejiang (DEJ)",
+    "c": 9054
+  },
+  "DHH": {
+    "a": "Barkol (DHH)",
+    "c": 9000
+  },
+  "DLU": {
+    "a": "Dali (DLU)",
+    "c": 2205
+  },
+  "DQA": {
+    "a": "Daqing (DQA)",
+    "c": 7696
+  },
+  "DTU": {
+    "a": "Wudalianchi (DTU)",
+    "c": 8519
+  },
+  "DXJ": {
+    "a": "Xiangxi Biancheng (DXJ)",
+    "c": 8884
+  },
+  "DZH": {
+    "a": "Dazhou (DZH)",
+    "c": 8811
+  },
+  "ENH": {
+    "a": "Enshi City (ENH)",
+    "c": 2460
+  },
+  "ENY": {
+    "a": "Yan'an (ENY)",
+    "c": 2472
+  },
+  "ERL": {
+    "a": "Erenhot (ERL)",
+    "c": 2498
+  },
+  "FUG": {
+    "a": "Fuyang (FUG)",
+    "c": 2799
+  },
+  "FUO": {
+    "a": "Foshan (FUO)",
+    "c": 7701
+  },
+  "FYJ": {
+    "a": "Fuyuan, Heilongjiang (FYJ)",
+    "c": 8283
+  },
+  "FYN": {
+    "a": "Fuyun County (FYN)",
+    "c": 8418
+  },
+  "GMQ": {
+    "a": "Golog (GMQ)",
+    "c": 8425
+  },
+  "GXH": {
+    "a": "Xiahe (GXH)",
+    "c": 8220
+  },
+  "GYS": {
+    "a": "Guangyuan (GYS)",
+    "c": 3144
+  },
+  "GYU": {
+    "a": "Guyuan (GYU)",
+    "c": 8289
+  },
+  "GZG": {
+    "a": "Ganzi (GZG)",
+    "c": 8670
+  },
+  "HBQ": {
+    "a": "Qilian (HBQ)",
+    "c": 8551
+  },
+  "HCZ": {
+    "a": "Chenzhou (HCZ)",
+    "c": 8790
+  },
+  "HDG": {
+    "a": "Handan (HDG)",
+    "c": 3234
+  },
+  "HEK": {
+    "a": "Heihe (HEK)",
+    "c": 3260
+  },
+  "HJJ": {
+    "a": "Huaihua (HJJ)",
+    "c": 3311
+  },
+  "HLH": {
+    "a": "Ulanhot (HLH)",
+    "c": 3330
+  },
+  "HMI": {
+    "a": "Hami City (HMI)",
+    "c": 3349
+  },
+  "HNY": {
+    "a": "Hengyang (HNY)",
+    "c": 3369
+  },
+  "HPG": {
+    "a": "Shennongjia (HPG)",
+    "c": 8266
+  },
+  "HQL": {
+    "a": "Tashkurgan (HQL)",
+    "c": 8868
+  },
+  "HQQ": {
+    "a": "Anyang (HQQ)",
+    "c": 8902
+  },
+  "HSC": {
+    "a": "Shaoguan (HSC)",
+    "c": 3415
+  },
+  "HSF": {
+    "a": "Dongning (HSF)",
+    "c": 8976
+  },
+  "JNZ": {
+    "a": "Jinzhou (JNZ)",
+    "c": 3873
+  },
+  "YKH": {
+    "a": "Yingkou (YKH)",
+    "c": 8384
+  },
+  "CGQ": {
+    "a": "Changchun and Jilin City (CGQ)",
+    "c": 1696
+  },
+  "TNH": {
+    "a": "Tonghua (TNH)",
+    "c": 6596
+  },
+  "NBS": {
+    "a": "Baishan (NBS)",
+    "c": 5428
+  },
+  "YSQ": {
+    "a": "Songyuan (YSQ)",
+    "c": 8474
+  },
+  "YNJ": {
+    "a": "Yanji (YNJ)",
+    "c": 7348
+  },
+  "HRB": {
+    "a": "Harbin (HRB)",
+    "c": 3401
+  },
+  "NDG": {
+    "a": "Qiqihar (NDG)",
+    "c": 7729
+  },
+  "JXA": {
+    "a": "Jixi (JXA)",
+    "c": 3940
+  },
+  "LDS": {
+    "a": "Yichun (Heilongjiang) (LDS)",
+    "c": 7718
+  },
+  "JMU": {
+    "a": "Jiamusi (JMU)",
+    "c": 3862
+  },
+  "JSJ": {
+    "a": "Jiansanjiang (JSJ)",
+    "c": 8471
+  },
+  "OHE": {
+    "a": "Mohe (OHE)",
+    "c": 5604
+  },
+  "JGD": {
+    "a": "Jiagedaqi (JGD)",
+    "c": 8054
+  },
+  "SHA": {
+    "a": "Shanghai (SHA)",
+    "c": 6303
+  },
+  "PVG": {
+    "a": "Shanghai (PVG)",
+    "c": 5972
+  },
+  "NKG": {
+    "a": "Nanjing (NKG)",
+    "c": 5476
+  },
+  "WUX": {
+    "a": "Wuxi / Suzhou (WUX)",
+    "c": 7000
+  },
+  "XUZ": {
+    "a": "Xuzhou (XUZ)",
+    "c": 7102
+  },
+  "CZX": {
+    "a": "Changzhou (CZX)",
+    "c": 2074
+  },
+  "NTG": {
+    "a": "Nantong (NTG)",
+    "c": 7742
+  },
+  "LYG": {
+    "a": "Lianyungang (LYG)",
+    "c": 4806
+  },
+  "HIA": {
+    "a": "Huai'an (HIA)",
+    "c": 3292
+  },
+  "YNZ": {
+    "a": "Yancheng (YNZ)",
+    "c": 7356
+  },
+  "YTY": {
+    "a": "Yangzhou (YTY)",
+    "c": 7478
+  },
+  "HGH": {
+    "a": "Hangzhou (HGH)",
+    "c": 3276
+  },
+  "NGB": {
+    "a": "Ningbo (NGB)",
+    "c": 5453
+  },
+  "WNZ": {
+    "a": "Wenzhou (WNZ)",
+    "c": 6961
+  },
+  "JNH": {
+    "a": "Jiaxing (JNH)",
+    "c": 9027
+  },
+  "YIW": {
+    "a": "Yiwu (YIW)",
+    "c": 7279
+  },
+  "JUZ": {
+    "a": "Quzhou (JUZ)",
+    "c": 3933
+  },
+  "HSN": {
+    "a": "Zhoushan (HSN)",
+    "c": 3423
+  },
+  "HYN": {
+    "a": "Taizhou (HYN)",
+    "c": 3488
+  },
+  "LIJ": {
+    "a": "Lishui (LIJ)",
+    "c": 8999
+  },
+  "HFE": {
+    "a": "Hefei (HFE)",
+    "c": 3270
+  },
+  "WHA": {
+    "a": "Wuhu Xuanzhou (WHA)",
+    "c": 8777
+  },
+  "TXN": {
+    "a": "Huangshan City (TXN)",
+    "c": 7934
+  },
+  "JUH": {
+    "a": "Chizhou (JUH)",
+    "c": 8177
+  },
+  "FOC": {
+    "a": "Fuzhou (FOC)",
+    "c": 2743
+  },
+  "XMN": {
+    "a": "Xiamen (XMN)",
+    "c": 7075
+  },
+  "SQJ": {
+    "a": "Sanming (SQJ)",
+    "c": 8381
+  },
+  "JJN": {
+    "a": "Quanzhou (JJN)",
+    "c": 3839
+  },
+  "WUS": {
+    "a": "Wuyishan, Nanping, Fujian (WUS)",
+    "c": 7977
+  },
+  "LCX": {
+    "a": "Longyan (LCX)",
+    "c": 4473
+  },
+  "KHN": {
+    "a": "Nanchang (KHN)",
+    "c": 4095
+  },
+  "ZHY": {
+    "a": "Zhongwei (ZHY)",
+    "c": 7617
+  },
+  "PEK": {
+    "a": "Beijing (PEK)",
+    "c": 5762
+  },
+  "PKX": {
+    "a": "Beijing Daxing (PKX)",
+    "c": 8603
+  },
+  "TSN": {
+    "a": "Tianjin (TSN)",
+    "c": 6648
+  },
+  "SJW": {
+    "a": "Shijiazhuang (SJW)",
+    "c": 7849
+  },
+  "TVS": {
+    "a": "Tangshan (TVS)",
+    "c": 6680
+  },
+  "XNT": {
+    "a": "Xingtai (XNT)",
+    "c": 7081
+  },
+  "ZQZ": {
+    "a": "Zhangjiakou (ZQZ)",
+    "c": 8193
+  },
+  "TYN": {
+    "a": "Taiyuan (TYN)",
+    "c": 6693
+  },
+  "SZH": {
+    "a": "Shuozhou (SZH)",
+    "c": 8912
+  },
+  "YCU": {
+    "a": "Yuncheng (YCU)",
+    "c": 7981
+  },
+  "WUT": {
+    "a": "Xinzhou (WUT)",
+    "c": 8380
+  },
+  "LFQ": {
+    "a": "Linfen (LFQ)",
+    "c": 8377
+  },
+  "LLV": {
+    "a": "Lüliang (LLV)",
+    "c": 8256
+  },
+  "HET": {
+    "a": "Hohhot (HET)",
+    "c": 3264
+  },
+  "WUA": {
+    "a": "Wuhai (WUA)",
+    "c": 6997
+  },
+  "TGO": {
+    "a": "Tongliao (TGO)",
+    "c": 7902
+  },
+  "HUO": {
+    "a": "Holingol (HUO)",
+    "c": 8447
+  },
+  "DSN": {
+    "a": "Ordos City (DSN)",
+    "c": 2287
+  },
+  "HLD": {
+    "a": "Hailar (HLD)",
+    "c": 3327
+  },
+  "NZH": {
+    "a": "Manzhouli (NZH)",
+    "c": 7994
+  },
+  "NZL": {
+    "a": "Zhalantun (NZL)",
+    "c": 8426
+  },
+  "RLK": {
+    "a": "Bayannur (RLK)",
+    "c": 7809
+  },
+  "UCB": {
+    "a": "Ulanqab (UCB)",
+    "c": 8402
+  },
+  "YIE": {
+    "a": "Arxan (YIE)",
+    "c": 7270
+  },
+  "XIL": {
+    "a": "Xilinhot (XIL)",
+    "c": 7054
+  },
+  "SHE": {
+    "a": "Shenyang (SHE)",
+    "c": 6306
+  },
+  "DLC": {
+    "a": "Dalian (DLC)",
+    "c": 2193
+  },
+  "JDZ": {
+    "a": "Jingdezhen (JDZ)",
+    "c": 3790
+  },
+  "JIU": {
+    "a": "Jiujiang (JIU)",
+    "c": 3835
+  },
+  "KOW": {
+    "a": "Ganzhou (KOW)",
+    "c": 4243
+  },
+  "JRJ": {
+    "a": "Ruijin (JRJ)",
+    "c": 9017
+  },
+  "JGS": {
+    "a": "Ji'an (JGS)",
+    "c": 3813
+  },
+  "YIC": {
+    "a": "Yichun, Jiangxi (YIC)",
+    "c": 8127
+  },
+  "SQD": {
+    "a": "Shangrao (SQD)",
+    "c": 8445
+  },
+  "TNA": {
+    "a": "Jinan (TNA)",
+    "c": 6593
+  },
+  "TAO": {
+    "a": "Qingdao (TAO)",
+    "c": 6480
+  },
+  "DOY": {
+    "a": "Dongying (DOY)",
+    "c": 7695
+  },
+  "YNT": {
+    "a": "Yantai (YNT)",
+    "c": 7355
+  },
+  "WEF": {
+    "a": "Weifang (WEF)",
+    "c": 6916
+  },
+  "JNG": {
+    "a": "Jining (JNG)",
+    "c": 3866
+  },
+  "WEH": {
+    "a": "Weihai (WEH)",
+    "c": 6917
+  },
+  "RIZ": {
+    "a": "Rizhao (RIZ)",
+    "c": 8376
+  },
+  "LYI": {
+    "a": "Linyi (LYI)",
+    "c": 4808
+  },
+  "HZA": {
+    "a": "Heze (HZA)",
+    "c": 8774
+  },
+  "CGO": {
+    "a": "Zhengzhou (CGO)",
+    "c": 1694
+  },
+  "LYA": {
+    "a": "Luoyang (LYA)",
+    "c": 4802
+  },
+  "NNY": {
+    "a": "Nanyang (NNY)",
+    "c": 5496
+  },
+  "XAI": {
+    "a": "Xinyang (XAI)",
+    "c": 8544
+  },
+  "WUH": {
+    "a": "Wuhan (WUH)",
+    "c": 6998
+  },
+  "WDS": {
+    "a": "Shiyan (WDS)",
+    "c": 8379
+  },
+  "YIH": {
+    "a": "Yichang (YIH)",
+    "c": 7273
+  },
+  "XFN": {
+    "a": "Xiangyang (XFN)",
+    "c": 7045
+  },
+  "EHU": {
+    "a": "Ezhou (EHU)",
+    "c": 8825
+  },
+  "SHS": {
+    "a": "Jingzhou (SHS)",
+    "c": 8761
+  },
+  "CSX": {
+    "a": "Changsha (CSX)",
+    "c": 1949
+  },
+  "WGN": {
+    "a": "Shaoyang (WGN)",
+    "c": 8472
+  },
+  "YYA": {
+    "a": "Yueyang (YYA)",
+    "c": 8595
+  },
+  "CGD": {
+    "a": "Changde (CGD)",
+    "c": 1685
+  },
+  "DYG": {
+    "a": "Zhangjiajie (DYG)",
+    "c": 2328
+  },
+  "LLF": {
+    "a": "Yongzhou (LLF)",
+    "c": 4594
+  },
+  "CAN": {
+    "a": "Guangzhou (CAN)",
+    "c": 1562
+  },
+  "SZX": {
+    "a": "Shenzhen (SZX)",
+    "c": 6467
+  },
+  "ZUH": {
+    "a": "Zhuhai (ZUH)",
+    "c": 7670
+  },
+  "ZHA": {
+    "a": "Zhanjiang (ZHA)",
+    "c": 7614
+  },
+  "HUZ": {
+    "a": "Huizhou (HUZ)",
+    "c": 3465
+  },
+  "MXZ": {
+    "a": "Meizhou (MXZ)",
+    "c": 5362
+  },
+  "SWA": {
+    "a": "Shantou (SWA)",
+    "c": 6424
+  },
+  "NNG": {
+    "a": "Nanning (NNG)",
+    "c": 5491
+  },
+  "LZH": {
+    "a": "Liuzhou (LZH)",
+    "c": 4820
+  },
+  "KWL": {
+    "a": "Guilin (KWL)",
+    "c": 4369
+  },
+  "WUZ": {
+    "a": "Wuzhou (WUZ)",
+    "c": 7001
+  },
+  "BHY": {
+    "a": "Beihai (BHY)",
+    "c": 1183
+  },
+  "YLX": {
+    "a": "Yulin (YLX)",
+    "c": 8732
+  },
+  "HAK": {
+    "a": "Haikou (HAK)",
+    "c": 3166
+  },
+  "SYX": {
+    "a": "Sanya (SYX)",
+    "c": 6452
+  },
+  "CKG": {
+    "a": "Chongqing (CKG)",
+    "c": 1767
+  },
+  "WXN": {
+    "a": "Wanzhou (WXN)",
+    "c": 7013
+  },
+  "JIQ": {
+    "a": "Qianjiang (JIQ)",
+    "c": 3833
+  },
+  "WSK": {
+    "a": "Wushan (WSK)",
+    "c": 8664
+  },
+  "TFU": {
+    "a": "Chengdu (TFU)",
+    "c": 8762
+  },
+  "PZI": {
+    "a": "Panzhihua (PZI)",
+    "c": 8125
+  },
+  "LZO": {
+    "a": "Luzhou (LZO)",
+    "c": 4824
+  },
+  "MIG": {
+    "a": "Mianyang (MIG)",
+    "c": 5020
+  },
+  "NAO": {
+    "a": "Nanchong (NAO)",
+    "c": 5418
+  },
+  "LZG": {
+    "a": "Langzhong (LZG)",
+    "c": 8911
+  },
+  "YBP": {
+    "a": "Yibin (YBP)",
+    "c": 7147
+  },
+  "JZH": {
+    "a": "Jiuzhaigou (JZH)",
+    "c": 3944
+  },
+  "KGT": {
+    "a": "Kangding (KGT)",
+    "c": 7714
+  },
+  "XIC": {
+    "a": "Xichang (XIC)",
+    "c": 7052
+  },
+  "KWE": {
+    "a": "Guiyang (KWE)",
+    "c": 4362
+  },
+  "LPF": {
+    "a": "Liupanshui (LPF)",
+    "c": 8305
+  },
+  "ZYI": {
+    "a": "Zunyi (ZYI)",
+    "c": 7679
+  },
+  "WMT": {
+    "a": "Zunyi (WMT)",
+    "c": 8473
+  },
+  "TEN": {
+    "a": "Tongren (TEN)",
+    "c": 8907
+  },
+  "KJH": {
+    "a": "Huangping (KJH)",
+    "c": 8222
+  },
+  "LLB": {
+    "a": "Libo County (LLB)",
+    "c": 4592
+  },
+  "KMG": {
+    "a": "Kunming (KMG)",
+    "c": 4179
+  },
+  "TCZ": {
+    "a": "Tengchong (TCZ)",
+    "c": 6506
+  },
+  "ZAT": {
+    "a": "Zhaotong (ZAT)",
+    "c": 7583
+  },
+  "LJG": {
+    "a": "Lijiang (LJG)",
+    "c": 4575
+  },
+  "SYM": {
+    "a": "Simao (SYM)",
+    "c": 7888
+  },
+  "JMJ": {
+    "a": "Lancang (JMJ)",
+    "c": 8451
+  },
+  "LNJ": {
+    "a": "Lincang (LNJ)",
+    "c": 4636
+  },
+  "WNH": {
+    "a": "Wenshan (WNH)",
+    "c": 6959
+  },
+  "JHG": {
+    "a": "Jinghong (JHG)",
+    "c": 3818
+  },
+  "LUM": {
+    "a": "Mang City (LUM)",
+    "c": 4758
+  },
+  "DIG": {
+    "a": "Diqing (DIG)",
+    "c": 2163
+  },
+  "LXA": {
+    "a": "Lhasa (LXA)",
+    "c": 4795
+  },
+  "RKZ": {
+    "a": "Shigatse (RKZ)",
+    "c": 6118
+  },
+  "LZY": {
+    "a": "Nyingchi (LZY)",
+    "c": 4826
+  },
+  "LGZ": {
+    "a": "Shannan (LGZ)",
+    "c": 8858
+  },
+  "NGQ": {
+    "a": "Shiquanhe, Ngari (NGQ)",
+    "c": 5456
+  },
+  "XIY": {
+    "a": "Xi'an (XIY)",
+    "c": 7056
+  },
+  "HZG": {
+    "a": "Hanzhong (HZG)",
+    "c": 3493
+  },
+  "UYN": {
+    "a": "Yulin (UYN)",
+    "c": 7954
+  },
+  "LHW": {
+    "a": "Lanzhou (LHW)",
+    "c": 8024
+  },
+  "JGN": {
+    "a": "Jiayuguan and Jiuquan (JGN)",
+    "c": 3808
+  },
+  "JIC": {
+    "a": "Jinchang (JIC)",
+    "c": 7712
+  },
+  "YZY": {
+    "a": "Zhangye (YZY)",
+    "c": 7574
+  },
+  "DNH": {
+    "a": "Dunhuang (DNH)",
+    "c": 2223
+  },
+  "IQN": {
+    "a": "Qingyang (IQN)",
+    "c": 3655
+  },
+  "LNL": {
+    "a": "Longnan (LNL)",
+    "c": 8517
+  },
+  "XNN": {
+    "a": "Xining (XNN)",
+    "c": 7080
+  },
+  "YUS": {
+    "a": "Yushu City, Qinghai (YUS)",
+    "c": 7486
+  },
+  "GOQ": {
+    "a": "Golmud (GOQ)",
+    "c": 3022
+  },
+  "HXD": {
+    "a": "Delingha (HXD)",
+    "c": 8290
+  },
+  "HTT": {
+    "a": "Mangnai (HTT)",
+    "c": 8411
+  },
+  "INC": {
+    "a": "Yinchuan (INC)",
+    "c": 3615
+  },
+  "URC": {
+    "a": "Urumqi (URC)",
+    "c": 6767
+  },
+  "KRY": {
+    "a": "Karamay (KRY)",
+    "c": 4287
+  },
+  "TLQ": {
+    "a": "Turpan (TLQ)",
+    "c": 8297
+  },
+  "JBK": {
+    "a": "Qitai (JBK)",
+    "c": 8957
+  },
+  "KRL": {
+    "a": "Korla (KRL)",
+    "c": 4278
+  },
+  "RQA": {
+    "a": "Ruoqiang Loulan (RQA)",
+    "c": 8577
+  },
+  "IQM": {
+    "a": "Qiemo (IQM)",
+    "c": 3654
+  },
+  "KCA": {
+    "a": "Kuqa (KCA)",
+    "c": 3991
+  },
+  "KHG": {
+    "a": "Kashgar (KHG)",
+    "c": 4088
+  },
+  "QSZ": {
+    "a": "Yarkant (Shache) (QSZ)",
+    "c": 8475
+  },
+  "HTN": {
+    "a": "Hotan (HTN)",
+    "c": 3436
+  },
+  "YTW": {
+    "a": "Yutian (YTW)",
+    "c": 8869
+  },
+  "YIN": {
+    "a": "Yining (YIN)",
+    "c": 7275
+  },
+  "ZFL": {
+    "a": "Zhaosu (ZFL)",
+    "c": 8813
+  },
+  "TCG": {
+    "a": "Trat (TCG)",
+    "c": 7892
+  },
+  "KJI": {
+    "a": "Burqin (KJI)",
+    "c": 4128
+  },
+  "SHF": {
+    "a": "Shihezi (SHF)",
+    "c": 8378
+  },
+  "TWC": {
+    "a": "Tumxuk (TWC)",
+    "c": 8578
+  }
+}
