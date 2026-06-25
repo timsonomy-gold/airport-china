@@ -491,13 +491,13 @@ def main():
       <header>
         <input id="search" class="search" placeholder="搜索机场名、城市、IATA 或 ICAO" autocomplete="off">
         <div class="filters">
-          <button class="chip active" data-class="all">全部民用运输 269</button>
-          <button class="chip" data-class="branch">支线/中小型 214</button>
-          <button class="chip" data-class="major">干线/枢纽 55</button>
-          <button class="chip" data-class="4D">4D 36</button>
-          <button class="chip" data-class="4C">4C 174</button>
-          <button class="chip" data-class="3C">3C 3</button>
-          <button class="chip" data-class="1B">1B 1</button>
+          <button class="chip active" data-class="all" aria-pressed="true">全部民用运输 269</button>
+          <button class="chip" data-class="branch" aria-pressed="false">支线/中小型 214</button>
+          <button class="chip" data-class="major" aria-pressed="false">干线/枢纽 55</button>
+          <button class="chip" data-class="4D" aria-pressed="false">4D 36</button>
+          <button class="chip" data-class="4C" aria-pressed="false">4C 174</button>
+          <button class="chip" data-class="3C" aria-pressed="false">3C 3</button>
+          <button class="chip" data-class="1B" aria-pressed="false">1B 1</button>
         </div>
       </header>
       <div class="regions" id="regions"></div>
@@ -549,7 +549,7 @@ def main():
     let transform = {{ k: 1, x: 0, y: 0 }};
     let fitTransform = {{ k: 1, x: 0, y: 0 }};
     let labelScale = Number(labelSlider.value);
-    let activeClass = "all";
+    let activeClasses = new Set(["all"]);
     let selected = null;
     let dragging = false;
     let dragMoved = false;
@@ -632,11 +632,15 @@ def main():
       }};
     }}
 
+    function airportMatchesFilter(a, filter) {{
+      if (filter === "branch") return a.branch;
+      if (filter === "major") return !a.branch;
+      return a.cls === filter;
+    }}
+
     function airportVisibleByClass(a) {{
-      if (activeClass === "all") return true;
-      if (activeClass === "branch") return a.branch;
-      if (activeClass === "major") return !a.branch;
-      return a.cls === activeClass;
+      if (activeClasses.has("all")) return true;
+      return [...activeClasses].some(filter => airportMatchesFilter(a, filter));
     }}
 
     function airportVisibleBySearch(a) {{
@@ -679,7 +683,7 @@ def main():
       const labelCandidates = visible.filter(a => {{
         if (hideLabels.checked) return selected && selected.iata === a.iata;
         if (searchActive) return true;
-        if (activeClass !== "all") return true;
+        if (!activeClasses.has("all")) return true;
         return labelAllowed(a);
       }});
       for (const a of labelCandidates) {{
@@ -697,8 +701,8 @@ def main():
       renderList(visible);
     }}
 
-    function renderList(items) {{
-      const scopeName = {{
+    function selectedFilterName(filter) {{
+      return {{
         all: "全部民用运输机场",
         branch: "支线/中小型机场",
         major: "干线/枢纽机场",
@@ -706,7 +710,13 @@ def main():
         "4C": "4C 机场",
         "3C": "3C 机场",
         "1B": "1B 机场"
-      }}[activeClass] || "机场";
+      }}[filter] || "机场";
+    }}
+
+    function renderList(items) {{
+      const scopeName = activeClasses.has("all")
+        ? selectedFilterName("all")
+        : [...activeClasses].map(selectedFilterName).join(" + ");
       resultMeta.textContent = `${{scopeName}}：显示 ${{items.length}} 个`;
       const topItems = items
         .sort((a, b) => (a.branch === b.branch ? a.iata.localeCompare(b.iata) : Number(b.branch) - Number(a.branch)));
@@ -841,10 +851,28 @@ def main():
     }});
     search.addEventListener("input", drawAirports);
 
+    function syncFilterButtons() {{
+      chips.forEach(chip => {{
+        const active = activeClasses.has(chip.dataset.class);
+        chip.classList.toggle("active", active);
+        chip.setAttribute("aria-pressed", active ? "true" : "false");
+      }});
+    }}
+
     chips.forEach(chip => chip.addEventListener("click", () => {{
-      chips.forEach(item => item.classList.remove("active"));
-      chip.classList.add("active");
-      activeClass = chip.dataset.class;
+      const filter = chip.dataset.class;
+      if (filter === "all") {{
+        activeClasses = new Set(["all"]);
+      }} else {{
+        activeClasses.delete("all");
+        if (activeClasses.has(filter)) {{
+          activeClasses.delete(filter);
+        }} else {{
+          activeClasses.add(filter);
+        }}
+        if (activeClasses.size === 0) activeClasses.add("all");
+      }}
+      syncFilterButtons();
       drawAirports();
     }}));
 
