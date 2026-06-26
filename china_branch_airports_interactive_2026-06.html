@@ -80,7 +80,7 @@
     .airport-hit {
       cursor: pointer;
       stroke: #fff;
-      stroke-width: 5;
+      stroke-width: 4;
       filter: drop-shadow(0 1px 1px rgba(20, 34, 48, 0.22));
     }
     .major-hit {
@@ -145,11 +145,11 @@
     }
     .airport-hit.connected-hit {
       stroke: #145f92;
-      stroke-width: 7;
+      stroke-width: 5.5;
     }
     .airport-hit.selected-hit {
       stroke: #122f44;
-      stroke-width: 9;
+      stroke-width: 7;
     }
     .label {
       pointer-events: none;
@@ -163,18 +163,6 @@
     }
     .label.hidden { display: none; }
     .label.major-label { fill: #6b7885; font-size: 66px; font-weight: 600; }
-    .hud {
-      position: absolute;
-      left: 24px;
-      top: 22px;
-      display: flex;
-      gap: 12px;
-      align-items: flex-start;
-      flex-wrap: wrap;
-      max-width: calc(100% - 48px);
-      pointer-events: none;
-      z-index: 4;
-    }
     .controls {
       position: absolute;
       left: 24px;
@@ -198,26 +186,6 @@
     }
     .controls.collapsed .zoom-box {
       display: none;
-    }
-    .title {
-      padding: 14px 18px 13px;
-      background: var(--panel);
-      border: 1px solid #d7e1e8;
-      border-radius: 8px;
-      box-shadow: var(--shadow);
-      pointer-events: auto;
-    }
-    h1 {
-      margin: 0;
-      font-size: 25px;
-      letter-spacing: 0;
-      line-height: 1.15;
-    }
-    .subtitle {
-      margin-top: 5px;
-      color: var(--muted);
-      font-size: 13px;
-      white-space: nowrap;
     }
     .zoom-box {
       width: 300px;
@@ -298,9 +266,9 @@
       transition: width .18s ease, max-height .18s ease, background .18s ease, border-color .18s ease;
     }
     .side.collapsed {
-      top: 16px;
+      top: auto;
       right: 16px;
-      bottom: auto;
+      bottom: 18px;
       width: auto;
       border-color: transparent;
       background: transparent;
@@ -440,7 +408,7 @@
     .legend {
       position: absolute;
       left: 24px;
-      top: 116px;
+      top: 18px;
       background: var(--panel);
       border: 1px solid #d7e1e8;
       border-radius: 8px;
@@ -461,32 +429,14 @@
         grid-template-columns: 1fr;
         grid-template-rows: minmax(0, 1fr);
       }
-      .hud { left: 12px; top: 12px; }
       .controls { left: 12px; bottom: 12px; }
-      .title h1 { font-size: 19px; }
-      .subtitle { white-space: normal; }
       .zoom-box { width: 300px; max-width: calc(100vw - 24px); }
-      .legend { left: 12px; top: 102px; flex-wrap: wrap; max-width: calc(100% - 24px); }
+      .legend { left: 12px; top: 12px; flex-wrap: wrap; max-width: calc(100% - 24px); }
     }
     @media (max-width: 760px), (pointer: coarse) and (max-width: 900px) {
-      .hud {
-        left: 8px;
-        top: 8px;
-        max-width: calc(100% - 16px);
-      }
-      .title {
-        padding: 9px 11px 8px;
-      }
-      .title h1 {
-        font-size: 16px;
-        line-height: 1.15;
-      }
-      .subtitle {
-        display: none;
-      }
       .legend {
         left: 8px;
-        top: 56px;
+        top: 8px;
         padding: 6px 8px;
         gap: 8px;
         font-size: 11px;
@@ -916,12 +866,6 @@
         <g id="airportLayer"></g>
         <g id="labelLayer"></g>
       </svg>
-      <div class="hud">
-        <div class="title">
-          <h1>中国民用机场及航线查询</h1>
-          <div class="subtitle">截至 2026-06-24，默认显示大陆全部在运营民用运输机场 269 座</div>
-        </div>
-      </div>
       <div class="controls collapsed" id="controlsPanel">
         <button id="controlsToggle" class="panel-toggle controls-toggle" aria-expanded="false" title="展开比例和文字设置">调节</button>
         <div class="zoom-box">
@@ -947,9 +891,9 @@
         </div>
       </div>
       <div class="legend">
-        <span><i class="dot" style="background:#b7222d;width:14px;height:14px"></i>4F</span>
-        <span><i class="dot" style="background:#e67621;width:13px;height:13px"></i>4E</span>
-        <span><i class="dot" style="background:#da9f2f;width:12px;height:12px"></i>4D</span>
+        <span><i class="dot" style="background:#b7222d;width:12px;height:12px"></i>4F</span>
+        <span><i class="dot" style="background:#e67621;width:11px;height:11px"></i>4E</span>
+        <span><i class="dot" style="background:#da9f2f;width:10px;height:10px"></i>4D</span>
         <span><i class="dot" style="background:#2377b8;width:10px;height:10px"></i>4C</span>
         <span><i class="dot" style="background:#589769;width:9px;height:9px"></i>3C</span>
         <span><i class="dot" style="background:#78828f;width:8px;height:8px"></i>1B</span>
@@ -994,12 +938,12 @@
       "1B": "#78828f"
     };
     const classRadius = {
-      "4F": 28,
-      "4E": 24,
-      "4D": 20,
-      "4C": 16,
-      "3C": 13,
-      "1B": 10
+      "4F": 23,
+      "4E": 20,
+      "4D": 17,
+      "4C": 14,
+      "3C": 12,
+      "1B": 9
     };
     const classRank = {
       "1B": 1,
@@ -1144,7 +1088,7 @@
 
     function syncViewportSize() {
       const width = Math.max(window.innerWidth || document.documentElement.clientWidth || 0, 320);
-      const height = Math.max(window.innerHeight || document.documentElement.clientHeight || 0, 420);
+      const height = Math.max(window.innerHeight || document.documentElement.clientHeight || 0, 320);
       app.style.width = `${width}px`;
       app.style.height = `${height}px`;
       requestAnimationFrame(drawAirports);
