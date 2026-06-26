@@ -431,6 +431,20 @@ def main():
     .controls.collapsed .zoom-box {{
       display: none;
     }}
+    .map-title {{
+      position: absolute;
+      left: 24px;
+      top: 18px;
+      z-index: 4;
+      padding: 2px 0;
+      color: #203447;
+      font-size: 18px;
+      font-weight: 760;
+      line-height: 1.15;
+      pointer-events: none;
+      white-space: nowrap;
+      text-shadow: 0 1px 0 rgba(255,255,255,0.9), 0 0 4px rgba(255,255,255,0.8);
+    }}
     .zoom-box {{
       width: 300px;
       padding: 10px 11px 9px;
@@ -652,19 +666,16 @@ def main():
     .legend {{
       position: absolute;
       left: 24px;
-      top: 18px;
-      background: var(--panel);
-      border: 1px solid #d7e1e8;
-      border-radius: 8px;
-      box-shadow: var(--shadow);
-      padding: 9px 11px;
+      top: 62px;
+      padding: 0;
       display: flex;
       gap: 12px;
       align-items: center;
-      color: #506477;
+      color: #30465a;
       font-size: 12px;
       pointer-events: none;
       z-index: 4;
+      text-shadow: 0 1px 0 rgba(255,255,255,0.9), 0 0 4px rgba(255,255,255,0.8);
     }}
     .legend span {{ display: inline-flex; align-items: center; gap: 6px; }}
     .dot {{ width: 10px; height: 10px; border-radius: 999px; display: inline-block; }}
@@ -675,13 +686,20 @@ def main():
       }}
       .controls {{ left: 12px; bottom: 12px; }}
       .zoom-box {{ width: 300px; max-width: calc(100vw - 24px); }}
-      .legend {{ left: 12px; top: 12px; flex-wrap: wrap; max-width: calc(100% - 24px); }}
+      .map-title {{ left: 12px; top: 12px; font-size: 16px; padding: 2px 0; }}
+      .legend {{ left: 12px; top: 52px; flex-wrap: wrap; max-width: calc(100% - 24px); }}
     }}
     @media (max-width: 760px), (pointer: coarse) and (max-width: 900px) {{
-      .legend {{
+      .map-title {{
         left: 8px;
         top: 8px;
-        padding: 6px 8px;
+        font-size: 14px;
+        padding: 2px 0;
+      }}
+      .legend {{
+        left: 8px;
+        top: 42px;
+        padding: 0;
         gap: 8px;
         font-size: 11px;
       }}
@@ -772,6 +790,7 @@ def main():
         <g id="airportLayer"></g>
         <g id="labelLayer"></g>
       </svg>
+      <div class="map-title">中国民用机场及航线查询</div>
       <div class="controls collapsed" id="controlsPanel">
         <button id="controlsToggle" class="panel-toggle controls-toggle" aria-expanded="false" title="展开比例和文字设置">调节</button>
         <div class="zoom-box">
