@@ -246,7 +246,7 @@ def main():
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
   <title>中国民用机场及航线查询</title>
   <style>
     :root {{
@@ -258,7 +258,10 @@ def main():
       --shadow: 0 12px 32px rgba(31, 49, 67, 0.12);
     }}
     * {{ box-sizing: border-box; }}
-    html {{ height: 100%; }}
+    html {{
+      height: 100%;
+      overscroll-behavior: none;
+    }}
     body {{
       margin: 0;
       width: 100%;
@@ -269,6 +272,8 @@ def main():
       color: var(--ink);
       font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "STHeiti", "Microsoft YaHei", sans-serif;
       overflow: hidden;
+      overscroll-behavior: none;
+      touch-action: none;
     }}
     .app {{
       position: fixed;
@@ -290,6 +295,8 @@ def main():
       background: #eef4f8;
       overflow: hidden;
       contain: layout paint size;
+      overscroll-behavior: none;
+      touch-action: none;
     }}
     svg {{
       display: block;
@@ -303,6 +310,8 @@ def main():
       max-height: 100%;
       cursor: grab;
       user-select: none;
+      -webkit-user-select: none;
+      -webkit-touch-callout: none;
       touch-action: none;
     }}
     svg.dragging {{ cursor: grabbing; }}
@@ -881,6 +890,7 @@ def main():
     const SVG_W = {WIDTH};
     const SVG_H = {HEIGHT};
     const BASE_PAD = 150;
+    const VIEW_MARGIN = 260;
     const classColor = {{
       "4F": "#b7222d",
       "4E": "#e67621",
@@ -940,25 +950,97 @@ def main():
     let labelScale = Number(labelSlider.value);
     let activeClasses = new Set(["all"]);
     let selected = null;
-    let dragging = false;
     let dragMoved = false;
-    let lastPoint = null;
-    let pointerDownPoint = null;
+    let activePointers = new Map();
+    let gesture = null;
+    let suppressTap = false;
 
-    function svgPoint(event) {{
+    function svgPointFromClient(clientX, clientY) {{
       const pt = svg.createSVGPoint();
-      pt.x = event.clientX;
-      pt.y = event.clientY;
+      pt.x = clientX;
+      pt.y = clientY;
       const ctm = svg.getScreenCTM().inverse();
       const p = pt.matrixTransform(ctm);
       return {{ x: p.x, y: p.y }};
     }}
 
+    function svgPoint(event) {{
+      return svgPointFromClient(event.clientX, event.clientY);
+    }}
+
+    function pointerPoint(pointer) {{
+      return svgPointFromClient(pointer.clientX, pointer.clientY);
+    }}
+
+    function pinchMetrics(pointers) {{
+      const a = pointerPoint(pointers[0]);
+      const b = pointerPoint(pointers[1]);
+      return {{
+        center: {{ x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 }},
+        distance: Math.max(1, Math.hypot(a.x - b.x, a.y - b.y))
+      }};
+    }}
+
+    function beginPan(pointer) {{
+      const p = pointerPoint(pointer);
+      gesture = {{
+        type: "pan",
+        pointerId: pointer.pointerId,
+        start: p,
+        last: p,
+        startClient: {{ x: pointer.clientX, y: pointer.clientY }}
+      }};
+      dragMoved = false;
+    }}
+
+    function beginPinch() {{
+      const pointers = [...activePointers.values()].slice(0, 2);
+      if (pointers.length < 2) return;
+      const metrics = pinchMetrics(pointers);
+      gesture = {{
+        type: "pinch",
+        pointerIds: pointers.map(pointer => pointer.pointerId),
+        startCenter: metrics.center,
+        startDistance: metrics.distance,
+        startTransform: {{ ...transform }}
+      }};
+      dragMoved = true;
+      suppressTap = true;
+    }}
+
+    function safeSetPointerCapture(event) {{
+      try {{
+        if (svg.setPointerCapture) svg.setPointerCapture(event.pointerId);
+      }} catch (error) {{}}
+    }}
+
+    function safeReleasePointerCapture(event) {{
+      try {{
+        if (svg.releasePointerCapture) svg.releasePointerCapture(event.pointerId);
+      }} catch (error) {{}}
+    }}
+
+    function activePinchPointers() {{
+      if (gesture?.type === "pinch") {{
+        const pointers = gesture.pointerIds.map(id => activePointers.get(id)).filter(Boolean);
+        if (pointers.length >= 2) return pointers.slice(0, 2);
+      }}
+      return [...activePointers.values()].slice(0, 2);
+    }}
+
     function setTransform(next) {{
+      const k = Math.max(0.75, Math.min(8, next.k));
+      const b = contentBounds();
+      const clampAxis = (offset, min, max, size) => {{
+        const minOffset = size - max * k - VIEW_MARGIN;
+        const maxOffset = VIEW_MARGIN - min * k;
+        if (minOffset > maxOffset) return (minOffset + maxOffset) / 2;
+        return Math.min(maxOffset, Math.max(minOffset, offset));
+      }};
       transform = {{
-        k: Math.max(0.75, Math.min(8, next.k)),
-        x: next.x,
-        y: next.y
+        k,
+        x: clampAxis(next.x, b.minX, b.maxX, SVG_W),
+        y: clampAxis(next.y, b.minY, b.maxY, SVG_H)
       }};
       mapLayer.setAttribute("transform", `translate(${{transform.x}} ${{transform.y}}) scale(${{transform.k}})`);
       slider.value = transform.k.toFixed(2);
@@ -1322,32 +1404,92 @@ def main():
     }}
 
     svg.addEventListener("pointerdown", event => {{
-      dragging = true;
-      dragMoved = false;
-      lastPoint = svgPoint(event);
-      pointerDownPoint = lastPoint;
+      event.preventDefault();
+      activePointers.set(event.pointerId, {{
+        pointerId: event.pointerId,
+        clientX: event.clientX,
+        clientY: event.clientY
+      }});
+      safeSetPointerCapture(event);
       svg.classList.add("dragging");
-      svg.setPointerCapture(event.pointerId);
-    }});
+      if (activePointers.size === 1) {{
+        suppressTap = false;
+        beginPan(activePointers.get(event.pointerId));
+      }} else if (activePointers.size === 2) {{
+        beginPinch();
+      }}
+    }}, {{ passive: false }});
+
     svg.addEventListener("pointermove", event => {{
-      if (!dragging) return;
+      if (!activePointers.has(event.pointerId)) return;
+      event.preventDefault();
+      activePointers.set(event.pointerId, {{
+        pointerId: event.pointerId,
+        clientX: event.clientX,
+        clientY: event.clientY
+      }});
+
+      if (activePointers.size >= 2) {{
+        if (gesture?.type !== "pinch") beginPinch();
+        const pointers = activePinchPointers();
+        if (pointers.length < 2 || gesture?.type !== "pinch") return;
+        const metrics = pinchMetrics(pointers);
+        const nextK = Math.max(0.75, Math.min(8, gesture.startTransform.k * (metrics.distance / gesture.startDistance)));
+        const worldX = (gesture.startCenter.x - gesture.startTransform.x) / gesture.startTransform.k;
+        const worldY = (gesture.startCenter.y - gesture.startTransform.y) / gesture.startTransform.k;
+        setTransform({{
+          k: nextK,
+          x: metrics.center.x - worldX * nextK,
+          y: metrics.center.y - worldY * nextK
+        }});
+        return;
+      }}
+
+      if (gesture?.type !== "pan" || gesture.pointerId !== event.pointerId) {{
+        beginPan(activePointers.get(event.pointerId));
+      }}
       const p = svgPoint(event);
-      if (pointerDownPoint && Math.hypot(p.x - pointerDownPoint.x, p.y - pointerDownPoint.y) > 35) {{
+      if (Math.hypot(event.clientX - gesture.startClient.x, event.clientY - gesture.startClient.y) > 8) {{
         dragMoved = true;
       }}
-      setTransform({{ k: transform.k, x: transform.x + p.x - lastPoint.x, y: transform.y + p.y - lastPoint.y }});
-      lastPoint = p;
-    }});
-    svg.addEventListener("pointerup", event => {{
-      const p = svgPoint(event);
-      dragging = false;
-      svg.classList.remove("dragging");
-      svg.releasePointerCapture(event.pointerId);
-      if (!dragMoved) {{
-        const airport = nearestAirportAt(p);
-        if (airport) selectAirport(airport, false);
+      setTransform({{ k: transform.k, x: transform.x + p.x - gesture.last.x, y: transform.y + p.y - gesture.last.y }});
+      gesture.last = p;
+    }}, {{ passive: false }});
+
+    function endPointer(event, allowTap) {{
+      const pointer = activePointers.get(event.pointerId);
+      const wasTap = allowTap && pointer && gesture?.type === "pan" && gesture.pointerId === event.pointerId && !dragMoved && !suppressTap;
+      const tapPoint = wasTap ? pointerPoint(pointer) : null;
+      safeReleasePointerCapture(event);
+      activePointers.delete(event.pointerId);
+
+      if (activePointers.size === 0) {{
+        svg.classList.remove("dragging");
+        gesture = null;
+        suppressTap = false;
+        if (wasTap && tapPoint) {{
+          const airport = nearestAirportAt(tapPoint);
+          if (airport) selectAirport(airport, false);
+        }}
+        return;
       }}
-      pointerDownPoint = null;
+
+      suppressTap = true;
+      if (activePointers.size >= 2) {{
+        beginPinch();
+      }} else {{
+        beginPan([...activePointers.values()][0]);
+        dragMoved = true;
+      }}
+    }}
+
+    svg.addEventListener("pointerup", event => {{
+      event.preventDefault();
+      endPointer(event, true);
+    }}, {{ passive: false }});
+    svg.addEventListener("pointercancel", event => endPointer(event, false));
+    svg.addEventListener("lostpointercapture", event => {{
+      if (activePointers.has(event.pointerId)) endPointer(event, false);
     }});
     svg.addEventListener("wheel", event => {{
       event.preventDefault();
