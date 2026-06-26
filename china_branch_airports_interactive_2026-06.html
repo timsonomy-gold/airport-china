@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>中国支线机场可缩放查询图</title>
+  <title>中国民用机场及航线查询</title>
   <style>
     :root {
       --bg: #f6f9fb;
@@ -75,8 +75,7 @@
       filter: drop-shadow(0 1px 1px rgba(20, 34, 48, 0.22));
     }
     .major-hit {
-      fill: #9faab4;
-      opacity: 0.62;
+      opacity: 1;
     }
     .route-line {
       fill: none;
@@ -753,7 +752,7 @@
       </svg>
       <div class="hud">
         <div class="title">
-          <h1>中国大陆支线机场查询图</h1>
+          <h1>中国民用机场及航线查询</h1>
           <div class="subtitle">截至 2026-06-24，默认显示大陆全部在运营民用运输机场 269 座</div>
         </div>
       </div>
@@ -769,9 +768,9 @@
           <div class="zoom-row">
             <div class="control-label">文字</div>
             <button id="labelDown" title="缩小文字">−</button>
-            <input id="labelSlider" type="range" min="0.45" max="2.2" step="0.05" value="1.25">
+            <input id="labelSlider" type="range" min="0.45" max="2.2" step="0.05" value="0.55">
             <button id="labelUp" title="放大文字">＋</button>
-            <div id="labelReadout" class="scale-readout">1.25×</div>
+            <div id="labelReadout" class="scale-readout">0.55×</div>
           </div>
           <label class="toggle-row">
             <input id="hideLabels" type="checkbox">
@@ -781,11 +780,12 @@
         </div>
       </div>
       <div class="legend">
-        <span><i class="dot" style="background:#da9f2f"></i>4D</span>
-        <span><i class="dot" style="background:#2377b8"></i>4C</span>
-        <span><i class="dot" style="background:#589769"></i>3C</span>
-        <span><i class="dot" style="background:#78828f"></i>1B</span>
-        <span><i class="dot" style="background:#9faab4"></i>4E/4F 干线/枢纽</span>
+        <span><i class="dot" style="background:#b7222d;width:14px;height:14px"></i>4F</span>
+        <span><i class="dot" style="background:#e67621;width:13px;height:13px"></i>4E</span>
+        <span><i class="dot" style="background:#da9f2f;width:12px;height:12px"></i>4D</span>
+        <span><i class="dot" style="background:#2377b8;width:10px;height:10px"></i>4C</span>
+        <span><i class="dot" style="background:#589769;width:9px;height:9px"></i>3C</span>
+        <span><i class="dot" style="background:#78828f;width:8px;height:8px"></i>1B</span>
       </div>
     </section>
     <aside class="side">
@@ -823,12 +823,20 @@
       "1B": "#78828f"
     };
     const classRadius = {
-      "4F": 16,
-      "4E": 15,
-      "4D": 22,
-      "4C": 19,
-      "3C": 17,
-      "1B": 17
+      "4F": 28,
+      "4E": 24,
+      "4D": 20,
+      "4C": 16,
+      "3C": 13,
+      "1B": 10
+    };
+    const classRank = {
+      "1B": 1,
+      "3C": 2,
+      "4C": 3,
+      "4D": 4,
+      "4E": 5,
+      "4F": 6
     };
 
     const app = document.getElementById("app");
@@ -994,7 +1002,7 @@
       const routeCodes = routeAirportCodes(groups);
       drawRoutes(groups);
       const searchActive = search.value.trim().length > 0;
-      const sorted = [...visible].sort((a, b) => Number(a.branch) - Number(b.branch));
+      const sorted = [...visible].sort((a, b) => (classRank[a.cls] || 0) - (classRank[b.cls] || 0));
 
       for (const a of sorted) {
         const p = airportScreen(a);
@@ -1007,7 +1015,7 @@
         circle.setAttribute("cy", p.y);
         circle.setAttribute("r", classRadius[a.cls] || 5);
         circle.setAttribute("class", classes.join(" "));
-        circle.setAttribute("fill", a.branch ? classColor[a.cls] : "#9faab4");
+        circle.setAttribute("fill", classColor[a.cls] || "#78828f");
         circle.style.opacity = "1";
         airportLayer.appendChild(circle);
       }
@@ -1126,7 +1134,7 @@
         const btn = document.createElement("button");
         btn.className = "item" + (selected && selected.iata === a.iata ? " selected" : "");
         btn.innerHTML = `
-          <span class="code" style="background:${a.branch ? classColor[a.cls] : "#9faab4"}">${a.iata}</span>
+          <span class="code" style="background:${classColor[a.cls] || "#78828f"}">${a.iata}</span>
           <span>
             <span class="name">${a.shortName}</span>
             <span class="meta">${a.cls} · ${a.city} · ${a.icao}</span>
